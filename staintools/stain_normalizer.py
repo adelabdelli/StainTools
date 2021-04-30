@@ -36,8 +36,14 @@ class StainNormalizer(object):
         :return:
         """
         stain_matrix_source = self.extractor.get_stain_matrix(I)
-        source_concentrations = get_concentrations(I, stain_matrix_source)
-        maxC_source = np.percentile(source_concentrations, 99, axis=0).reshape((1, 2))
-        source_concentrations *= (self.maxC_target / maxC_source)
-        tmp = 255 * np.exp(-1 * np.dot(source_concentrations, self.stain_matrix_target))
+        # Yoni's edit: get_strain_matrix returns false if the linalg doesn't work out. If that doesn't work out, we return an untransformed image
+        if isinstance(stain_matrix_source, np.ndarray):
+            source_concentrations = get_concentrations(I, stain_matrix_source, multiThread=False)
+            maxC_source = np.percentile(source_concentrations, 99, axis=0).reshape((1, 2))
+            source_concentrations *= (self.maxC_target / maxC_source)
+            tmp = 255 * np.exp(-1 * np.dot(source_concentrations, self.stain_matrix_target))
+            return tmp.reshape(I.shape).astype(np.uint8)
+        else:
+            print(f"=== This image was seen as background by Macenko method, and is therefore not transformed: {filename}")
+            return I.astype(np.uint8)
         return tmp.reshape(I.shape).astype(np.uint8)
