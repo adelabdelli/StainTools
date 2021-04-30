@@ -25,6 +25,10 @@ class MacenkoStainExtractor(ABCStainExtractor):
         tissue_mask = LuminosityThresholdTissueLocator.get_tissue_mask(I, luminosity_threshold=luminosity_threshold).reshape((-1,))
         OD = convert_RGB_to_OD(I).reshape((-1, 3))
         OD = OD[tissue_mask]
+        
+        # Yoni's edit!!
+        if tissue_mask.sum() <= 1: # If the tissue mask has 0 or 1 pixel the linalg does not work. We will return an untransformed image
+            return False
 
         # Eigenvectors of cov in OD space (orthogonal as cov symmetric)
         _, V = np.linalg.eigh(np.cov(OD, rowvar=False))
