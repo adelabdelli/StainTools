@@ -24,6 +24,7 @@ class LuminosityThresholdTissueLocator(ABCTissueLocator):
 
         # Check it's not empty
         if mask.sum() == 0:
-            raise TissueMaskException("Empty tissue mask computed")
+            #raise TissueMaskException("Empty tissue mask computed")
+            print("Empty tissue mask computed")
 
         return mask
