@@ -46,4 +46,4 @@ class StainNormalizer(object):
         else:
             print(f"=== This image was seen as background by Macenko method, and is therefore not transformed: {filename}")
             return I.astype(np.uint8)
-        return tmp.reshape(I.shape).astype(np.uint8)
+        
