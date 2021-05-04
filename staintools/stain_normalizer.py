@@ -44,6 +44,6 @@ class StainNormalizer(object):
             tmp = 255 * np.exp(-1 * np.dot(source_concentrations, self.stain_matrix_target))
             return tmp.reshape(I.shape).astype(np.uint8)
         else:
-            print(f"=== This image was seen as background by Macenko method, and is therefore not transformed: {filename}")
+            print(f"=== This image was seen as background by Macenko method, and is therefore not transformed")
             return I.astype(np.uint8)
         
